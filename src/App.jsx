@@ -1,37 +1,39 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Home from "./pages/Home";
-import Menu, { loader as menuLoader } from "./features/menu/Menu";
-import Cart from "./features/carts/Cart";
-import CreateOrder, { action as createOrderAction } from "./features/orders/CreateOrder";
-import Order, { loader as orderLoader } from "./features/orders/Order";
-import Error from "./UI-components/Error";
+import Home from './pages/Home';
+import Menu, { loader as menuLoader } from './features/menu/Menu';
+import Cart from './features/carts/Cart';
+import CreateOrder, {
+  action as createOrderAction,
+} from './features/orders/CreateOrder';
+import Order, { loader as orderLoader } from './features/orders/Order';
+import Error from './UI-components/Error';
 
-import AppLayOut from "./UI-components/AppLayOut";
+import AppLayOut from './UI-components/AppLayOut';
 
 const router = createBrowserRouter([
   {
     element: <AppLayOut />,
     errorElement: <Error />,
     children: [
-      { path: "/", element: <Home /> },
+      { path: '/', element: <Home /> },
       {
-        path: "menu",
+        path: 'menu',
         element: <Menu />,
         errorElement: <Error />,
         loader: menuLoader, // will fetching data at the same time as it start rendering correct Route
       },
       {
-        path: "cart",
+        path: 'cart',
         element: <Cart />,
       },
       {
-        path: "order/new",
+        path: 'order/new',
         element: <CreateOrder />,
-        action: createOrderAction,
+        action: createOrderAction, //actions are used to write data or to mutate data.
       },
       {
-        path: "order/:orderID",
+        path: 'order/:orderID',
         element: <Order />,
         errorElement: <Error />,
         loader: orderLoader,
