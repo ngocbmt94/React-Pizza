@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { store } from './store';
+import { Provider } from 'react-redux';
 
 import Home from './pages/Home';
 import Menu, { loader as menuLoader } from './features/menu/Menu';
@@ -8,7 +10,6 @@ import CreateOrder, {
 } from './features/orders/CreateOrder';
 import Order, { loader as orderLoader } from './features/orders/Order';
 import Error from './UI-components/Error';
-
 import AppLayOut from './UI-components/AppLayOut';
 
 const router = createBrowserRouter([
@@ -43,7 +44,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }
 
 export default App;

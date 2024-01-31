@@ -1,45 +1,32 @@
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
+import EmptyCart from './EmptyCart';
 import LinkButton from '../../UI-components/LinkButton';
 import Button from '../../UI-components/Button';
 import CartItem from './CartItem';
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: 'Mediterranean',
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: 'Vegetale',
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: 'Spinach and Mushroom',
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import { clearAllCart, getCart } from './cartSlice';
+import { getUserName } from '../users/userSlice';
 
 function Cart() {
-  const cart = fakeCart;
   const navigateFn = useNavigate();
+  const dispatch = useDispatch();
+  const userName = useSelector(getUserName);
+  const cart = useSelector(getCart);
 
+  function handleClearAllCart() {
+    dispatch(clearAllCart());
+  }
+
+  if (cart.length === 0) return <EmptyCart />;
   return (
-    <>
+    <div>
       <LinkButton to="/menu" arrow={true}>
         Back to menu
       </LinkButton>
       <div className="mx-auto max-w-xl rounded-xl border border-slate-300 bg-white p-5 shadow-lg">
         <h2 className="mb-5 text-xl font-semibold text-teals-800">
-          Your cart, %NAME%
+          Your cart, {userName}
         </h2>
         <ul className="mb-5 divide-y divide-slate-400">
           {cart.map((item) => (
@@ -50,12 +37,13 @@ function Cart() {
           <Button size="normal" onClick={() => navigateFn('/order/new')}>
             Order pizzas
           </Button>
-          <Button size="normal" color="secondary">
+
+          <Button size="normal" color="secondary" onClick={handleClearAllCart}>
             Clear cart{' '}
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -1,15 +1,25 @@
-const base = 'group relative overflow-hidden rounded-lg bg-white shadow-lg ';
+const base =
+  'group relative overflow-hidden rounded-lg bg-white shadow-lg cursor-poiter';
 const style = {
-  normal: `${base} h-12 w-48 text-lg`,
+  normal: `${base} h-12 w-auto px-5 text-lg`,
   small: `${base} h-8 w-28 text-xs`,
   color: {
     default: 'bg-teals-800',
     secondary: 'bg-slate-500/40',
   },
+  typeSpecial:
+    'w-7 h-7 rounded-full text-white mx-5 bg-teals-500 hover:bg-teals-800',
 };
 
-function Button({ children, disabled, onClick, size, color }) {
+function Button({ children, disabled, onClick, size, color, typeSpecial }) {
   const isNewColor = color !== 'default' && color !== undefined;
+
+  if (typeSpecial)
+    return (
+      <button onClick={onClick} className={style.typeSpecial}>
+        {children}
+      </button>
+    );
   return (
     <button
       onClick={onClick}

@@ -1,5 +1,11 @@
+import { useSelector } from 'react-redux';
 import CreateUser from '../features/users/CreateUser';
+import LinkButton from '../UI-components/LinkButton';
+import { getUserName } from '../features/users/userSlice';
+
 function Home() {
+  const userName = useSelector(getUserName);
+
   return (
     <div className="text-center">
       <h1 className="my-8 uppercase text-slate-900">
@@ -9,7 +15,13 @@ function Home() {
           Straight out of the oven, straight to you.
         </span>
       </h1>
-      <CreateUser />
+      {!userName ? (
+        <CreateUser />
+      ) : (
+        <LinkButton to="/menu" arrow={true}>
+          Continue ordering, {userName}
+        </LinkButton>
+      )}
     </div>
   );
 }
