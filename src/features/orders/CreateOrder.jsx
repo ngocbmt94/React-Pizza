@@ -2,8 +2,15 @@ import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../UI-components/Button';
-import { useSelector } from 'react-redux';
-import { getUserName } from '../users/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getAddressDefaultUser,
+  getUserName,
+  fetchAddress,
+  getStatusAddress,
+  getIsHasPostion,
+  getErrorAddress,
+} from '../users/userSlice';
 import { clearAllCart, getCart, getTotalPrice } from '../carts/cartSlice';
 import EmptyCart from '../carts/EmptyCart';
 import { store } from '../../store';
@@ -26,6 +33,15 @@ function CreateOrder() {
   const totalPrice = useSelector(getTotalPrice);
   const priorityPrice = withPriority ? totalPrice * 0.2 : 0;
   const total = totalPrice + priorityPrice;
+  const addressDefaultUser = useSelector(getAddressDefaultUser);
+  const statusAddress = useSelector(getStatusAddress);
+  const isLoadingAddress = statusAddress === 'loading';
+  const isErrorAddres = statusAddress === 'error';
+  const errorAddress = useSelector(getErrorAddress);
+
+  const isHasPosition = useSelector(getIsHasPostion);
+
+  const dispatch = useDispatch();
 
   if (cart.length === 0) return <EmptyCart />;
   return (
@@ -61,12 +77,32 @@ function CreateOrder() {
 
         <div className="mb-5 flex flex-col md:flex-row md:items-center">
           <label className="text-sm font-bold md:basis-32">Address</label>
-          <input
-            type="text"
-            name="address"
-            className="input-field grow"
-            required
-          />
+          <div className="grow">
+            <div className="flex items-center">
+              <input
+                type="text"
+                name="address"
+                className={`input-field mr-3 grow ${isErrorAddres ? 'border-red-600' : ''}`}
+                defaultValue={addressDefaultUser}
+                required
+              />
+              {!isHasPosition.latitude && !isHasPosition.longitude && (
+                <Button
+                  disabled={isLoadingAddress}
+                  size="small"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(fetchAddress());
+                  }}
+                >
+                  {isLoadingAddress ? '...loading' : 'get position'}
+                </Button>
+              )}
+            </div>
+            {isErrorAddres && (
+              <small className="mb-5 w-full text-red-600">{errorAddress}</small>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center">
@@ -86,7 +122,17 @@ function CreateOrder() {
         <div className="mt-10 text-center">
           {/* add cart value into data of action when submit form */}
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button size="normal" disabled={isSubmiting}>
+          <input
+            type="hidden"
+            name="position"
+            value={
+              isHasPosition.longitude && isHasPosition.latitude
+                ? JSON.stringify(isHasPosition)
+                : ''
+            }
+          />
+          {/* no submit when loading address  */}
+          <Button size="normal" disabled={isSubmiting || isLoadingAddress}>
             {!isSubmiting
               ? `Order now from ${formatCurrency(total)}`
               : 'SUBMITING...'}
@@ -101,12 +147,12 @@ export async function action({ request }) {
   // get data from form submit
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  console.log('data', data);
 
   const order = {
     ...data,
     priority: Boolean(data.priority),
     cart: JSON.parse(data.cart),
+    position: JSON.parse(data.position),
   };
 
   const errors = {};

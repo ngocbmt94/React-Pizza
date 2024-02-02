@@ -12,7 +12,6 @@ import OrderItem from './OrderItem';
 
 function Order() {
   const orderData = useLoaderData();
-  console.log(orderData);
 
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {
@@ -27,7 +26,7 @@ function Order() {
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-lg space-y-8 ">
       <div className="justifty-start flex flex-wrap items-center gap-x-20">
         <h2 className="font-extrabold text-teals-800">{`Order #${orderData.id} status`}</h2>
 
@@ -54,7 +53,7 @@ function Order() {
         </p>
       </div>
 
-      <ul className="max-w-lg divide-y  divide-slate-300 rounded-lg border border-slate-300 bg-white px-5 py-2 shadow-lg">
+      <ul className="divide-y  divide-slate-300 rounded-lg border border-slate-300 bg-white px-5 py-2 shadow-lg">
         {cart.map((item) => (
           <OrderItem item={item} key={item.pizzaId} />
         ))}

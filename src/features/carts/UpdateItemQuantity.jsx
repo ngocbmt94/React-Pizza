@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 function UpdateItemQuantity({ pizzaId }) {
   const dispatch = useDispatch();
   const currentQuantity = useSelector(getCurrentQuantityById(pizzaId));
-  console.log(currentQuantity);
 
   function handleIncrease() {
     dispatch(increaseQuantityItem(pizzaId));
