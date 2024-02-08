@@ -44,6 +44,7 @@ function CreateOrder() {
   const dispatch = useDispatch();
 
   if (cart.length === 0) return <EmptyCart />;
+
   return (
     <div className="mx-auto max-w-3xl rounded-2xl border border-slate-300 bg-white p-10 shadow-lg">
       <h2 className="mb-5 text-center text-2xl font-extrabold text-teals-800">
@@ -152,7 +153,6 @@ export async function action({ request }) {
     ...data,
     priority: Boolean(data.priority),
     cart: JSON.parse(data.cart),
-    position: JSON.parse(data.position),
   };
 
   const errors = {};
