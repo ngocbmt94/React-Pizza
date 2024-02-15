@@ -31,6 +31,7 @@ function Order() {
   useEffect(() => {
     if (!fetcher.data && fetcher.state === 'idle') fetcher.load('/menu');
   }, [fetcher]);
+  console.log(fetcher.data);
 
   return (
     <div className="max-w-lg space-y-8 ">

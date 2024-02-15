@@ -39,7 +39,7 @@ function Cart() {
           </Button>
 
           <Button size="normal" color="secondary" onClick={handleClearAllCart}>
-            Clear cart{' '}
+            Clear cart
           </Button>
         </div>
       </div>
