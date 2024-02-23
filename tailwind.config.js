@@ -19,9 +19,6 @@ module.exports = {
           900: '#025043',
         },
       },
-      backgroundImage: {
-        header: "url('./header.jpg')",
-      },
       fontFamily: {
         nunito: ['Nunito', ...defaultTheme.fontFamily.sans],
         lemon: ['Lemon', ...defaultTheme.fontFamily.sans],
